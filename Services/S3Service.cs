@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Net.Http;
 using Microsoft.Extensions.Configuration;
 using Amazon.S3;
 using Amazon.S3.Transfer;
@@ -23,24 +24,35 @@ namespace S3Uploader.Services
 
         private AmazonS3Client GetS3Client()
         {
-            string endpoint = _configuration.GetConnectionString("Endpoint");
-            string key = _configuration.GetConnectionString("Key");
-            string secret = _configuration.GetConnectionString("Secret");
-            bool useHttp = (_configuration.GetConnectionString("UseHttp").ToLower() == "yes")? true: false;
 
-            var config = new AmazonS3Config {
-                ServiceURL = endpoint,
-                ForcePathStyle = true,
-                UseHttp = useHttp
-            };
+            try {
+                string endpoint = _configuration.GetConnectionString("Endpoint");
+                string key = _configuration.GetConnectionString("Key");
+                string secret = _configuration.GetConnectionString("Secret");
+                bool useHttp = (_configuration.GetConnectionString("UseHttp").ToLower() == "yes")? true: false;
 
-            return new AmazonS3Client(key, secret, config);
+                var config = new AmazonS3Config {
+                    ServiceURL = endpoint,
+                    ForcePathStyle = true,
+                    UseHttp = useHttp
+                };
+
+                return new AmazonS3Client(key, secret, config);
+            }
+            catch(HttpRequestException ex)
+            {
+                Log.Information($"Please check the endpoint and credential in the configuration.");
+                return null;
+            }
+
         }
 
         public async Task ListS3Folders()
         {
             using (var client = GetS3Client())
             {
+                if (client is null) return;
+
                 ListBucketsResponse response = await client.ListBucketsAsync();
 
                 //View resposne data
@@ -68,6 +80,8 @@ namespace S3Uploader.Services
 
             using (var client = GetS3Client())
             {
+                if (client is null) return;
+
                 if (await AmazonS3Util.DoesS3BucketExistV2Async(client, bucket) == false)
                 {
                     Log.Information($"The Bucket is not exist. Create Bucket {bucket}");
