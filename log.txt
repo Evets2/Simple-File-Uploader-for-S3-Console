@@ -1,6 +1,0 @@
-2022-07-31 12:24:14.804 +08:00 [INF] Program Startup with the configuration at : /Users/steve/GitHub/S3Uploader/bin/Debug/netcoreapp3.1/osx-x64
-2022-07-31 12:24:16.753 +08:00 [INF] 2 files will be uploaded
-2022-08-01 22:24:33.361 +08:00 [INF] Program Startup with the configuration at : /Users/steve/GitHub/S3Uploader/bin/Debug/netcoreapp3.1/osx-x64
-2022-08-01 22:24:33.488 +08:00 [INF] 2 files will be uploaded
-2022-08-01 22:25:51.957 +08:00 [INF] Program Startup with the configuration at : /Users/steve/GitHub/S3Uploader/bin/Debug/netcoreapp3.1/osx-x64
-2022-08-01 22:25:52.081 +08:00 [INF] 2 files will be uploaded
